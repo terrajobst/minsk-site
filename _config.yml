@@ -1,13 +1,13 @@
 # Site Settings
-title: Jekflix | A theme for Jekyll
-email: youremail@xyz.com
+title: Minsk | A simple compiler
+email: immo@landwerth.net
 description: Some text about your blog.
-baseurl: "/jekflix-template" # the subpath of your site, e.g. /blog
-url: "https://www.rossener.com" # the base hostname & protocol for your site
+baseurl: "/minsk-site" # the subpath of your site, e.g. /blog
+url: "http://immo.landwerth.net" # the base hostname & protocol for your site
 google_analytics: "UA-XXXXXXXX-X"
 
 # User Settings
-username: Jekflix
+username: terrajobst
 user_description: Some text about you.
 disqus_username: disqus_username
 
