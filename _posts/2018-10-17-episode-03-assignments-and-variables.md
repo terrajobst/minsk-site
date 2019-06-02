@@ -1,9 +1,13 @@
 ---
 layout: post
-title: "Seja bem-vindo"
+title: "Episode 3: Assignments and variables"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-image: 'http://res.cloudinary.com/dm7h7e8xj/image/upload/c_scale,w_760/v1504807239/morpheus_xdzgg1.jpg'
-category: 'blog'
+image: 'https://i9.ytimg.com/vi/61dLQNgd9o8/maxresdefault.jpg?sqp=CICEzucF&rs=AOn4CLBVFaMf9wNO8I9RZHZlVUI2_oqLVw'
+category: 'mobile'
+tags:
+- app
+- mobile
+- ios
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---

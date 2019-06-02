@@ -1,13 +1,12 @@
 ---
 layout: post
-title: "Li Europan lingues es membres"
-date: 2018-03-12 12:26:40
-image: 'https://res.cloudinary.com/dm7h7e8xj/image/upload/v1551651632/serverless-aws-lambda_dsjjwy.png'
+title: "Episode 7: if-, while- and for-statements"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-category: 'tips'
+category: 'webdev'
 tags:
-- languages
-- tips
+- design
+- sketch
+image: 'https://i9.ytimg.com/vi/SJE_gUnJl2Y/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLD6rLBQ1X81n76jGb27-XWbKLCrGA'
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
@@ -127,13 +126,3 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
-
-
-
-
-
-
-
-
-
-

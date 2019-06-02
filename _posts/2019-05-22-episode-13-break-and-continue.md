@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "box-shadow ou filter: drop-shadow?"
-date: 2017-08-14 22:55:45
-image: 'http://res.cloudinary.com/dm7h7e8xj/image/upload/c_scale,w_760/v1502757949/o-sombra_xyw4wq.jpg'
+title: "Episode 13: Break and continue"
+date: 2018-03-12 12:26:40
+image: 'https://i9.ytimg.com/vi/NvVc8erZpeI/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLDvQMBK6CNUQ8mTtaSRsCG7LPMgtA'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-category: 'css'
+category: 'tips'
 tags:
-- css
-- frontend
+- languages
+- tips
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
@@ -127,11 +127,6 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
-
-
-
-
-
 
 
 

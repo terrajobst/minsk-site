@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Como fazer um Hello World com Vue.js 2"
+title: "Episode 12 - Function declarations"
+date: 2018-03-12 12:26:40
+image: 'https://i9.ytimg.com/vi/psTZi6xpTlM/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLDRkM4LMCVJNJM9BFE5yBwwSM_xrQ'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-image: 'http://res.cloudinary.com/dm7h7e8xj/image/upload/v1504810464/hello-world-vue_ibatoy.jpg'
-category: 'tutorial'
+category: 'tips'
 tags:
-- vuejs
-- javascript
-- tutorial
+- languages
+- tips
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
@@ -127,3 +127,13 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
+
+
+
+
+
+
+
+
+
+

@@ -1,12 +1,14 @@
 ---
 layout: post
-title: "Por que o Sketch vale 3 tanques de gasolina?"
+title: "Episode 8: Lowering"
+date: 2017-07-29 13:24:49
+image: 'https://i9.ytimg.com/vi/PfpayNvfu20/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLAzE9rLpvuZaEIrzplGs3vgZxMYyw'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-category: 'webdev'
+category: 'blog'
 tags:
-- design
-- sketch
-image: 'https://res.cloudinary.com/dm7h7e8xj/image/upload/c_fill,h_399,w_760/v1501102987/sketch-fuel_eiwjbz.png'
+- jekyll
+- wordpress
+- blog
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
@@ -126,3 +128,5 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
+
+

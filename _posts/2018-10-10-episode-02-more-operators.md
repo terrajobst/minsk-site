@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Com sociis natoque penatibus et magnis dis"
-date: 2018-11-22 12:26:40
-image: 'https://res.cloudinary.com/dm7h7e8xj/image/upload/c_fill,h_399,w_760/v1501268554/sunrise_ttb9nk.jpg'
+title: "Episode 2: More operators"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-category: 'tutorial'
+image: 'https://i9.ytimg.com/vi/3XM9vUGduhk/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLBiYJ1KBFMcKFb82gbKY-i678dePw'
+category: 'mobile'
 tags:
-- html
-- tutorial
+- component
+- ios
+- cocoapods
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
@@ -127,13 +127,3 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
-
-
-
-
-
-
-
-
-
-

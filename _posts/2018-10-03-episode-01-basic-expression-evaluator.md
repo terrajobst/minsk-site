@@ -1,11 +1,9 @@
 ---
 layout: post
-title: "Minhas primeiras 5 impressões sobre Django"
+title: "Episode 1: A basic expression evaluator"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-image: 'http://res.cloudinary.com/dm7h7e8xj/image/upload/v1504809708/django_g7djdj.jpg'
-category: 'django'
-tags:
-- django
+image: 'https://i9.ytimg.com/vi/wgHIkdUQbp0/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLB2BHkIVdwGehUiM_R0lvXc6wkQbA'
+category: 'blog'
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---

@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Sed ut perspiciatis unde omnis iste natus"
-date: 2018-02-03 12:26:40
-image: 'https://res.cloudinary.com/dm7h7e8xj/image/upload/v1551836833/mission_impossible_djiusi.jpg'
+title: "Episode 10 - Strings and Types"
+date: 2017-08-14 22:55:45
+image: 'https://i9.ytimg.com/vi/VkFNanrdvLc/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLBnBP4RKhdH9G7ZOAbF1M3-aGLsLw'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-category: 'tutorial'
+category: 'css'
 tags:
 - css
-- tutorial
+- frontend
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
@@ -127,6 +127,11 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
+
+
+
+
+
 
 
 

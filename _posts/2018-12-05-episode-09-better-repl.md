@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Como migrar seus posts do Wordpress para o Jekyll de um jeito simples"
-date: 2017-07-29 13:24:49
-image: 'https://res.cloudinary.com/dm7h7e8xj/image/upload/c_scale,w_760/v1501345962/wordpress-to-jekyll_mx4ddm.png'
+title: "Episode 9 - A better REPL"
+date: 2017-08-07 23:04:08
+image: 'https://i9.ytimg.com/vi/QwZuY1dExAc/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLA6I7Q7V_7HodhXXJHK-W_6Pt-n9Q'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-category: 'blog'
+category: 'tutorial'
 tags:
+- vuejs
 - jekyll
-- wordpress
 - blog
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -128,5 +128,23 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Desafio aceito. Fazendo uma app do Dribbble do zero"
+title: "Episode 14: Return statements and control flow analysis"
+date: 2018-04-21 12:26:40
+image: 'https://i9.ytimg.com/vi/5813y1T8lhc/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLC3JiImjsdM1I_3AQ2vQLiFshdC-A'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-image: 'http://res.cloudinary.com/dm7h7e8xj/image/upload/c_scale,w_760/v1504807658/barney-stinson_eqt7kc.jpg'
-category: 'mobile'
+category: 'framework'
 tags:
-- app
-- mobile
-- ios
+- framework
+- tips
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
@@ -127,3 +127,13 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
+
+
+
+
+
+
+
+
+
+

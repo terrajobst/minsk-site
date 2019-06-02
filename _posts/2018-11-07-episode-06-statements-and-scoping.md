@@ -1,13 +1,12 @@
 ---
 layout: post
-title: "The quick brown fox jumps over a lazy dog"
-date: 2018-10-09 12:26:40
-image: 'http://res.cloudinary.com/dm7h7e8xj/image/upload/c_scale,w_760/v1506079212/jekflix-capa_vfhuzh.png'
+title: "Episode 6: Statements and scoping"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-category: 'css'
+category: 'webdev'
 tags:
-- css
-- tips
+- design
+- sketch
+image: 'https://i9.ytimg.com/vi/M0mEvzfObN0/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLBiXkO6CxiQlIsniKSGpudxPpwt9A'
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
@@ -127,13 +126,3 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
-
-
-
-
-
-
-
-
-
-

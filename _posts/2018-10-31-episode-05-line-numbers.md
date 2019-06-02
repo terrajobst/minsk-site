@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "A wonderful serenity has taken possession of my entire soul"
-date: 2018-07-20 12:26:40
-image: 'http://res.cloudinary.com/dm7h7e8xj/image/upload/c_scale,w_760/v1504023028/braziljs-2017_mazdtw.jpg'
+title: "Episode 5: Line numbers"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-category: 'blog'
+image: 'https://i9.ytimg.com/vi/EEzuO9XWmUY/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLAn2GkqTwLGsx7Y3c25310bATIw1g'
+category: 'tutorial'
 tags:
-- platform
-- blog
+- vuejs
+- javascript
+- tutorial
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
@@ -127,13 +127,3 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur e
 -----
 
 Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
-
-
-
-
-
-
-
-
-
-
