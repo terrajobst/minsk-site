@@ -11,118 +11,191 @@ twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
 
-Cas sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. *Aenean eu leo quam.* Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.
+## Completed items
 
-> Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
+* Added tests for lexing all tokens and their combinations
+* Added tests for parsing unary and binary operators
+* Added tests for evaluating
+* Added test execution to our CI
 
-Etiam porta **sem malesuada magna** mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
+## Interesting aspects
 
-## Inline HTML elements
+### Testing the lexer
 
-HTML defines a long list of available inline tags, a complete list of which can be found on the [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+Having a test that lexes all tokens is somewhat simple. In order to avoid
+repetition, I've used xUnit theories, which allows me to parameterize the unit
+test. You can see how this looks like in [LexerTests][Lexer_Lexes_Token]:
 
-- **To bold text**, use `<strong>`.
-- *To italicize text*, use `<em>`.
-- Abbreviations, like <abbr title="HyperText Markup Langage">HTML</abbr> should use `<abbr>`, with an optional `title` attribute for the full phrase.
-- Citations, like <cite>&mdash; Thiago Rossener</cite>, should use `<cite>`.
-- <del>Deleted</del> text should use `<del>` and <ins>inserted</ins> text should use `<ins>`.
-- Superscript <sup>text</sup> uses `<sup>` and subscript <sub>text</sub> uses `<sub>`.
+[Lexer_Lexes_Token]: https://github.com/terrajobst/minsk/blob/2dca38da4e85ce8cbb8a00a5f3ebc876338f02e7/Minsk.Tests/CodeAnalysis/Syntax/LexerTests.cs#L11-L20
 
-Most of these elements are styled by browsers with few modifications on our part.
+```C#
+[Theory]
+[MemberData(nameof(GetTokensData))]
+public void Lexer_Lexes_Token(SyntaxKind kind, string text)
+{
+    var tokens = SyntaxTree.ParseTokens(text);
 
-# Heading 1
+    var token = Assert.Single(tokens);
+    Assert.Equal(kind, token.Kind);
+    Assert.Equal(text, token.Text);
+}
 
-## Heading 2
+public static IEnumerable<object[]> GetTokensData()
+{
+    foreach (var t in GetTokens())
+        yield return new object[] { t.kind, t.text };
+}
 
-### Heading 3
-
-#### Heading 4
-
-Vivamus sagittis lacus vel augue rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-## Code
-
-Cum sociis natoque penatibus et magnis dis `code element` montes, nascetur ridiculus mus.
-
-```js
-// Example can be run directly in your JavaScript console
-
-// Create a function that takes two arguments and returns the sum of those arguments
-var adder = new Function("a", "b", "return a + b");
-
-// Call the function
-adder(2, 6);
-// > 8
+private static IEnumerable<(SyntaxKind kind, string text)> GetTokens()
+{
+    return new[]
+    {
+        (SyntaxKind.PlusToken, "+"),
+        (SyntaxKind.MinusToken, "-"),
+        (SyntaxKind.StarToken, "*"),
+        (SyntaxKind.SlashToken, "/"),
+        (SyntaxKind.BangToken, "!"),
+        (SyntaxKind.EqualsToken, "="),
+        (SyntaxKind.AmpersandAmpersandToken, "&&"),
+        (SyntaxKind.PipePipeToken, "||"),
+        (SyntaxKind.EqualsEqualsToken, "=="),
+        (SyntaxKind.BangEqualsToken, "!="),
+        (SyntaxKind.OpenParenthesisToken, "("),
+        (SyntaxKind.CloseParenthesisToken, ")"),
+        (SyntaxKind.FalseKeyword, "false"),
+        (SyntaxKind.TrueKeyword, "true"),
+        (SyntaxKind.NumberToken, "1"),
+        (SyntaxKind.NumberToken, "123"),
+        (SyntaxKind.IdentifierToken, "a"),
+        (SyntaxKind.IdentifierToken, "abc"),
+    };
+}
 ```
 
-Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.
+However, the issue is that the lexer makes a bunch of decisions based on the
+[next character][Lexer_Peek]. Thus, we generally want to make sure that it can
+handle virtually arbitrary combinations of characters after the token we
+actually want to lex. One way to do this is generate pairs of tokens and [verify
+that they lex][Lexer_Lexes_TokenPairs]:
 
-## Lists
+[Lexer_Peek]: https://github.com/terrajobst/minsk/blob/2dca38da4e85ce8cbb8a00a5f3ebc876338f02e7/Minsk/CodeAnalysis/Syntax/Lexer.cs#L22-L30
+[Lexer_Lexes_TokenPairs]: https://github.com/terrajobst/minsk/blob/2dca38da4e85ce8cbb8a00a5f3ebc876338f02e7/Minsk.Tests/CodeAnalysis/Syntax/LexerTests.cs#L22-L35
 
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+```C#
+[Theory]
+[MemberData(nameof(GetTokenPairsData))]
+public void Lexer_Lexes_TokenPairs(SyntaxKind t1Kind, string t1Text,
+                                    SyntaxKind t2Kind, string t2Text)
+{
+    var text = t1Text + t2Text;
+    var tokens = SyntaxTree.ParseTokens(text).ToArray();
 
-* Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-* Donec id elit non mi porta gravida at eget metus.
-* Nulla vitae elit libero, a pharetra augue.
+    Assert.Equal(2, tokens.Length);
+    Assert.Equal(tokens[0].Kind, t1Kind);
+    Assert.Equal(tokens[0].Text, t1Text);
+    Assert.Equal(tokens[1].Kind, t2Kind);
+    Assert.Equal(tokens[1].Text, t2Text);
+}
+```
 
-Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.
+The tricky thing there is that certain tokens cannot actually appear directly
+after each other. For example, you cannot parse two identifiers as they would
+generally parse as one. Similarly, certain operators will be combined when they
+appear next to each other (e.g. `!` and `=`). Thus, we only [generate pairs]
+where the combination doesn't require a separator.
 
-1. Vestibulum id ligula porta felis euismod semper.
-2. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-3. Maecenas sed diam eget risus varius blandit sit amet non magna.
+[generate pairs]: https://github.com/terrajobst/minsk/blob/2dca38da4e85ce8cbb8a00a5f3ebc876338f02e7/Minsk.Tests/CodeAnalysis/Syntax/LexerTests.cs#L145-L155
 
-Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.
+```C#
+private static IEnumerable<(SyntaxKind t1Kind, string t1Text, SyntaxKind t2Kind, string t2Text)> GetTokenPairs()
+{
+    foreach (var t1 in GetTokens())
+    {
+        foreach (var t2 in GetTokens())
+        {
+            if (!RequiresSeparator(t1.kind, t2.kind))
+                yield return (t1.kind, t1.text, t2.kind, t2.text);
+        }
+    }
+}
+```
 
-Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo.
+[Checking whether combinations require separators][RequiresSeparator] is pretty
+straight forward too:
 
-## Images
+[RequiresSeparator]: https://github.com/terrajobst/minsk/blob/2dca38da4e85ce8cbb8a00a5f3ebc876338f02e7/Minsk.Tests/CodeAnalysis/Syntax/LexerTests.cs#L110-L143
 
-Quisque consequat sapien eget quam rhoncus, sit amet laoreet diam tempus. Aliquam aliquam metus erat, a pulvinar turpis suscipit at.
+```C#
+private static bool RequiresSeparator(SyntaxKind t1Kind, SyntaxKind t2Kind)
+{
+    var t1IsKeyword = t1Kind.ToString().EndsWith("Keyword");
+    var t2IsKeyword = t2Kind.ToString().EndsWith("Keyword");
 
-![placeholder](https://placehold.it/800x400 "Large example image")
-![placeholder](https://placehold.it/400x200 "Medium example image")
-![placeholder](https://placehold.it/200x200 "Small example image")
+    if (t1Kind == SyntaxKind.IdentifierToken && t2Kind == SyntaxKind.IdentifierToken)
+        return true;
 
-## Tables
+    if (t1IsKeyword && t2IsKeyword)
+        return true;
 
-Aenean lacinia bibendum nulla sed consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    if (t1IsKeyword && t2Kind == SyntaxKind.IdentifierToken)
+        return true;
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upvotes</th>
-      <th>Downvotes</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <td>Totals</td>
-      <td>21</td>
-      <td>23</td>
-    </tr>
-  </tfoot>
-  <tbody>
-    <tr>
-      <td>Alice</td>
-      <td>10</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <td>Bob</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>Charlie</td>
-      <td>7</td>
-      <td>9</td>
-    </tr>
-  </tbody>
-</table>
+    if (t1Kind == SyntaxKind.IdentifierToken && t2IsKeyword)
+        return true;
 
-Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo.
+    if (t1Kind == SyntaxKind.NumberToken && t2Kind == SyntaxKind.NumberToken)
+        return true;
 
------
+    if (t1Kind == SyntaxKind.BangToken && t2Kind == SyntaxKind.EqualsToken)
+        return true;
 
-Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
+    if (t1Kind == SyntaxKind.BangToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+        return true;
+
+    if (t1Kind == SyntaxKind.EqualsToken && t2Kind == SyntaxKind.EqualsToken)
+        return true;
+
+    if (t1Kind == SyntaxKind.EqualsToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+        return true;
+
+    return false;
+}
+```
+
+### Testing binary operators
+
+One of the key things we need ot make sure is that our parser honors priorities
+of binary and unary operators and produces correctly shaped trees. One way to do
+this is by flatting the tree and simply asserting the sequence of nodes and
+tokens. To make life easier, we wrote [a class] that holds on to an
+`IEnumerator<SyntaxNode>` and offers public APIs for asserting nodes and tokens.
+This allows writing fairly concise tests:
+
+```C#
+//     op2
+//    /   \
+//   op1   c
+//  /   \
+// a     b
+
+using (var e = new AssertingEnumerator(expression))
+{
+    e.AssertNode(SyntaxKind.BinaryExpression);
+    e.AssertNode(SyntaxKind.BinaryExpression);
+    e.AssertNode(SyntaxKind.NameExpression);
+    e.AssertToken(SyntaxKind.IdentifierToken, "a");
+    e.AssertToken(op1, op1Text);
+    e.AssertNode(SyntaxKind.NameExpression);
+    e.AssertToken(SyntaxKind.IdentifierToken, "b");
+    e.AssertToken(op2, op2Text);
+    e.AssertNode(SyntaxKind.NameExpression);
+    e.AssertToken(SyntaxKind.IdentifierToken, "c");
+}
+```
+
+We've done this both for [binary operators][parser-binary-op] as well as for
+[unary operators][parser-unary-op] combined with binary operators.
+
+[asserting-enumerator]: https://github.com/terrajobst/minsk/blob/2dca38da4e85ce8cbb8a00a5f3ebc876338f02e7/Minsk.Tests/CodeAnalysis/Syntax/AssertingEnumerator.cs
+[parser-binary-op]: https://github.com/terrajobst/minsk/blob/2dca38da4e85ce8cbb8a00a5f3ebc876338f02e7/Minsk.Tests/CodeAnalysis/Syntax/ParserTests.cs#L9-L64
+[parser-unary-op]: https://github.com/terrajobst/minsk/blob/2dca38da4e85ce8cbb8a00a5f3ebc876338f02e7/Minsk.Tests/CodeAnalysis/Syntax/ParserTests.cs#L66-L117

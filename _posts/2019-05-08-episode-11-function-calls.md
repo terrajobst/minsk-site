@@ -12,127 +12,114 @@ twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
 
-Cas sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. *Aenean eu leo quam.* Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.
+## Completed items
 
-> Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
+We added support for calling built-in functions and convert between types.
 
-Etiam porta **sem malesuada magna** mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
+## Interesting aspects
 
-## Inline HTML elements
+### Separated syntax lists
 
-HTML defines a long list of available inline tags, a complete list of which can be found on the [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+When parsing call expressions, we need to represent the list of arguments. One
+might be tempted to just use `ImmutableArray<ExpressionSyntax>` but this begs
+the question where the comma between the arguments would go in the resulting
+syntax tree. One could say that they aren't recorded but for IDE-like
+experiences we generally want to make sure that the syntax tree can be
+serialized back to a text document at full fidelity. This enables refactoring by
+modifying the syntax tree but it also makes navigating the tree easier if we can
+assume that locations can always be mapped to a token and thus a containing
+node.
 
-- **To bold text**, use `<strong>`.
-- *To italicize text*, use `<em>`.
-- Abbreviations, like <abbr title="HyperText Markup Langage">HTML</abbr> should use `<abbr>`, with an optional `title` attribute for the full phrase.
-- Citations, like <cite>&mdash; Thiago Rossener</cite>, should use `<cite>`.
-- <del>Deleted</del> text should use `<del>` and <ins>inserted</ins> text should use `<ins>`.
-- Superscript <sup>text</sup> uses `<sup>` and subscript <sub>text</sub> uses `<sub>`.
+We could decide to introduce a new node like `ArgumentSyntax` that allows us to
+store the comma as an optional token. However, this also seems odd because
+trailing commas would be illegal as well as missing intermediary commas. Also,
+it easily breaks if we later support, say, reordering of arguments because we'd
+also have to move the comma between nodes. In short, this structure simply
+violates the mental model we have.
 
-Most of these elements are styled by browsers with few modifications on our part.
+So instead of doing any of that, we're introducing a special kind of list we
+call [`SeparatedSyntaxList<T>`][SeparatedSyntaxList] where `T` is a
+`SyntaxNode`. The idea is that the list is constructed from a list of nodes and
+tokens, so for code like
 
-# Heading 1
-
-## Heading 2
-
-### Heading 3
-
-#### Heading 4
-
-Vivamus sagittis lacus vel augue rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-## Code
-
-Cum sociis natoque penatibus et magnis dis `code element` montes, nascetur ridiculus mus.
-
-```js
-// Example can be run directly in your JavaScript console
-
-// Create a function that takes two arguments and returns the sum of those arguments
-var adder = new Function("a", "b", "return a + b");
-
-// Call the function
-adder(2, 6);
-// > 8
+```
+add(1, 2)
 ```
 
-Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.
+the separated syntax list would contain the expression `1`, the comma and the
+expression `2`. Enumerating and indexing the list will generally skip the
+separators (so that `Arguments[1]` would give you the second argument rather
+than the first comma), however, we have a method `GetSeparator(int index)` that
+returns the associated separator, which we define as the next token. For the
+last node it will return `null` because the last node doesn't have a trailing
+comma.
 
-## Lists
+[SeparatedSyntaxList]: https://github.com/terrajobst/minsk/blob/b7f24a0c2536570681923709e0516626f87d3a57/src/Minsk/CodeAnalysis/Syntax/SeparatedSyntaxList.cs
 
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+### Built-in functions
 
-* Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-* Donec id elit non mi porta gravida at eget metus.
-* Nulla vitae elit libero, a pharetra augue.
+We cannot declare functions yet so we added a set of [built-in functions] that
+we [special case in the evaluator][func-eval]. We currently support:
 
-Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.
+* `print(message: string)`. Writes to the console.
+* `input(): string`. Reads from the console.
+* `rnd(max: int)`. Returns a random number between `0` and `max - 1`.
 
-1. Vestibulum id ligula porta felis euismod semper.
-2. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-3. Maecenas sed diam eget risus varius blandit sit amet non magna.
+[built-in functions]: https://github.com/terrajobst/minsk/blob/53d729f2bca858b510b6c8bc3ed9a200cbd62099/src/Minsk/CodeAnalysis/Symbols/BuiltinFunctions.cs#L11-L13
+[func-eval]: https://github.com/terrajobst/minsk/blob/53d729f2bca858b510b6c8bc3ed9a200cbd62099/src/Minsk/CodeAnalysis/Evaluator.cs#L195-L219
 
-Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.
+### Scoping
 
-Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo.
+When we start to compile actual source files, we'll only allow declaring
+functions in the global scope, i.e. you won't be able to declare functions
+inside of functions.
 
-## Images
+However, in a REPL experience we often want to declare a function again so that
+we can fix bugs. The same applies to variables. We handled this by making new
+submissions logically nested inside the previous submission. This gives us the
+ability to see all previously declared functions and variables but also allows
+us to redefine them. If they would all be in the same scope, we'd produce errors
+because we generally don't want to allow developers to declare the same variable
+multiple times within the same scope.
 
-Quisque consequat sapien eget quam rhoncus, sit amet laoreet diam tempus. Aliquam aliquam metus erat, a pulvinar turpis suscipit at.
+To handle the [built-in functions], we're adding an [outermost scope] that
+contains them. This also allows developers to redefine the built-in functions if
+they wanted to.
 
-![placeholder](https://placehold.it/800x400 "Large example image")
-![placeholder](https://placehold.it/400x200 "Medium example image")
-![placeholder](https://placehold.it/200x200 "Small example image")
+[outermost scope]: https://github.com/terrajobst/minsk/blob/53d729f2bca858b510b6c8bc3ed9a200cbd62099/src/Minsk/CodeAnalysis/Binding/Binder.cs#L59-L67
 
-## Tables
+### Conversions
 
-Aenean lacinia bibendum nulla sed consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+One simple program we'd like to write is this:
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upvotes</th>
-      <th>Downvotes</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <td>Totals</td>
-      <td>21</td>
-      <td>23</td>
-    </tr>
-  </tfoot>
-  <tbody>
-    <tr>
-      <td>Alice</td>
-      <td>10</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <td>Bob</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>Charlie</td>
-      <td>7</td>
-      <td>9</td>
-    </tr>
-  </tbody>
-</table>
+```
+for i = 1 to 10
+{
+    let v = rnd(100)
+    print(v)
+}
+```
 
-Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo.
+However, the `print` functions takes a `string`, not an `int`. We need some kind
+of conversion mechanism. We're using a similar syntax to Pascal where casting
+looks like function calls:
 
------
+```
+for i = 1 to 10
+{
+    let v = rnd(100)
+    print(string(v))
+}
+```
 
-Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
+To bind them, we [check][bind-conversion] wether the call has exactly one
+argument and the name is resolving to a type. If so, we bind it as a conversion
+expression, otherwise as a regular function invocation.
 
+In order to decide which conversions are legal, we introduce the [`Conversion`]
+class. It tells us whether a given conversion from `fromType` to `toType` is
+valid and what kind it is. Right now, we don't support implicit conversions, but
+we'll add those later.
 
-
-
-
-
-
-
-
+[bind-conversion]: https://github.com/terrajobst/minsk/blob/eccaa40146d4330d9e8e2c48668135249edf9605/src/Minsk/CodeAnalysis/Binding/Binder.cs#L293-L294
+[`Conversion`]: https://github.com/terrajobst/minsk/blob/eccaa40146d4330d9e8e2c48668135249edf9605/src/Minsk/CodeAnalysis/Binding/Conversion.cs

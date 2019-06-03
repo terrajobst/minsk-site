@@ -12,118 +12,108 @@ twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
 
-Cas sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. *Aenean eu leo quam.* Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.
+## Completed items
 
-> Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
+* Add colorization to REPL
+* Add compilation unit
+* Add chaining to compilations
+* Add statements
+* Add variable declaration statements
 
-Etiam porta **sem malesuada magna** mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
+## Interesting aspects
 
-## Inline HTML elements
+### Scoping and shadowing
 
-HTML defines a long list of available inline tags, a complete list of which can be found on the [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+Logically, scopes are a tree and mirror the structure of the code, for example:
 
-- **To bold text**, use `<strong>`.
-- *To italicize text*, use `<em>`.
-- Abbreviations, like <abbr title="HyperText Markup Langage">HTML</abbr> should use `<abbr>`, with an optional `title` attribute for the full phrase.
-- Citations, like <cite>&mdash; Thiago Rossener</cite>, should use `<cite>`.
-- <del>Deleted</del> text should use `<del>` and <ins>inserted</ins> text should use `<ins>`.
-- Superscript <sup>text</sup> uses `<sup>` and subscript <sub>text</sub> uses `<sub>`.
-
-Most of these elements are styled by browsers with few modifications on our part.
-
-# Heading 1
-
-## Heading 2
-
-### Heading 3
-
-#### Heading 4
-
-Vivamus sagittis lacus vel augue rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-## Code
-
-Cum sociis natoque penatibus et magnis dis `code element` montes, nascetur ridiculus mus.
-
-```js
-// Example can be run directly in your JavaScript console
-
-// Create a function that takes two arguments and returns the sum of those arguments
-var adder = new Function("a", "b", "return a + b");
-
-// Call the function
-adder(2, 6);
-// > 8
+```
+{
+    var x = 10
+    {
+        var y = x * 2
+        {
+            var z = x * y
+        }
+        {
+            var result = x + y
+        }
+    }
+}
 ```
 
-Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.
+The outermost scope contains `x`. Within that, there is a nested scope that
+contains `y`. Within that, there are two more scopes, one containing `z` and one
+containing `result`.
 
-## Lists
+Some programming languages, such as C, allow *shadowing* which means that a
+nested scope can declare variables that conflict with names from an outer scope.
+This means that within that scope the new name takes precedence, i.e. *shadows*
+the name coming from the outer scope. Other languages, such as C#, disallow
+that. In C#, only scopes that aren't in a parent-child relationship can have
+conflicting names. For instance, it would be valid to name `result` as `z` as
+the these two scopes are peers, but it wouldn't be valid to name `z` as `y`
+because it would conflict with the `y` coming from the parent scope.
 
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+We're currently not very picky and allow shadowing.
 
-* Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-* Donec id elit non mi porta gravida at eget metus.
-* Nulla vitae elit libero, a pharetra augue.
+We use the [BoundScope] class to represent scopes during binding. Before binding
+nested statements, we [create a new scope][scoping]:
 
-Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.
+```C#
+private BoundStatement BindBlockStatement(BlockStatementSyntax syntax)
+{
+    var statements = ImmutableArray.CreateBuilder<BoundStatement>();
+    _scope = new BoundScope(_scope);
 
-1. Vestibulum id ligula porta felis euismod semper.
-2. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-3. Maecenas sed diam eget risus varius blandit sit amet non magna.
+    foreach (var statementSyntax in syntax.Statements)
+    {
+        var statement = BindStatement(statementSyntax);
+        statements.Add(statement);
+    }
 
-Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.
+    _scope = _scope.Parent;
 
-Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo.
+    return new BoundBlockStatement(statements.ToImmutable());
+}
+```
 
-## Images
+[BoundScope]: https://github.com/terrajobst/minsk/blob/9ac348f761419a8f2b5839a6105d38b18b291f37/src/Minsk/CodeAnalysis/Binding/BoundScope.cs#L6
+[scoping]: https://github.com/terrajobst/minsk/blob/9ac348f761419a8f2b5839a6105d38b18b291f37/src/Minsk/CodeAnalysis/Binding/Binder.cs#L78-L86
 
-Quisque consequat sapien eget quam rhoncus, sit amet laoreet diam tempus. Aliquam aliquam metus erat, a pulvinar turpis suscipit at.
+### Submissions
 
-![placeholder](https://placehold.it/800x400 "Large example image")
-![placeholder](https://placehold.it/400x200 "Medium example image")
-![placeholder](https://placehold.it/200x200 "Small example image")
+In a read-eval-print-loop (REPL) environment everything is ad hoc. Thus, it's
+often useful to be able to redeclare variables one has declared earlier, with a
+different type if necessary. So logically, you can think of the individual
+submissions to the REPL as nesting where the previous submission is a parent of
+the current submission (which means the first submission is the root).
 
-## Tables
+Given that we allow shadowing we can model this as representing the previous
+submissions as parents of the current scope. To do this, we've down a few
+things:
 
-Aenean lacinia bibendum nulla sed consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+1. We allow [compilations to be chained][chaining]. In other words, subsequent
+   submissions create a new `Compilation` by calling
+   `previousCompilation.ContinueWith(syntaxTree)`.
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upvotes</th>
-      <th>Downvotes</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <td>Totals</td>
-      <td>21</td>
-      <td>23</td>
-    </tr>
-  </tfoot>
-  <tbody>
-    <tr>
-      <td>Alice</td>
-      <td>10</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <td>Bob</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>Charlie</td>
-      <td>7</td>
-      <td>9</td>
-    </tr>
-  </tbody>
-</table>
+2. When binding the new tree, we pass in the [previous compilation's
+   state][pass-state].
 
-Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo.
+3. The binder then creates a [hierarchy of scopes][create-scope].
 
------
+[chaining]: https://github.com/terrajobst/minsk/blob/9ac348f761419a8f2b5839a6105d38b18b291f37/src/Minsk/CodeAnalysis/Compilation.cs#L43-L46
+[pass-state]: https://github.com/terrajobst/minsk/blob/9ac348f761419a8f2b5839a6105d38b18b291f37/src/Minsk/CodeAnalysis/Compilation.cs#L35
+[create-scope]: https://github.com/terrajobst/minsk/blob/9ac348f761419a8f2b5839a6105d38b18b291f37/src/Minsk/CodeAnalysis/Binding/Binder.cs#L34-L56
 
-Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
+## Expression statements
+
+Languages that separate expressions from statements often allow a specific set
+of expressions as statements, for example, assignments, and method calls. We
+currently allow any expression to be statements, even ones like `12 + 12`. Since
+we currently only experience our language through a REPL, this makes sense.
+
+However, when we're starting to process actual files we'll probably disallow
+expressions to be used in statements if they have no side effects as they don't
+do anything but heat up the CPU. But at that point we probably also want to
+add an option to the compilation that indicates whether or not the compilation
+is in REPL mode, in which case we'd allow them again.

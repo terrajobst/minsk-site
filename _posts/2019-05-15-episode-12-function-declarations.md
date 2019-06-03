@@ -12,128 +12,110 @@ twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
 
-Cas sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. *Aenean eu leo quam.* Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.
+## Completed items
 
-> Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
+We added support for explicit typing of variables and function declarations.
 
-Etiam porta **sem malesuada magna** mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
+## Interesting aspects
 
-## Inline HTML elements
+### Procedures vs. functions
 
-HTML defines a long list of available inline tags, a complete list of which can be found on the [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+Some languages have different concepts for functions that return values and
+functions that don't return values. The latter are often called *procedures*. In
+C-style languages both are called functions except that procedures have a
+special return type called `void`, that is to say they don't return anything.
 
-- **To bold text**, use `<strong>`.
-- *To italicize text*, use `<em>`.
-- Abbreviations, like <abbr title="HyperText Markup Langage">HTML</abbr> should use `<abbr>`, with an optional `title` attribute for the full phrase.
-- Citations, like <cite>&mdash; Thiago Rossener</cite>, should use `<cite>`.
-- <del>Deleted</del> text should use `<del>` and <ins>inserted</ins> text should use `<ins>`.
-- Superscript <sup>text</sup> uses `<sup>` and subscript <sub>text</sub> uses `<sub>`.
+In Minsk I'm doing the same thing except that you'll be able to omit the return
+type specification, so code doesn't have to say `void`. In fact, the type `void`
+cannot be uttered in code at all:
 
-Most of these elements are styled by browsers with few modifications on our part.
+```
+» function hi(name: string): void
+· {
+· }
 
-# Heading 1
-
-## Heading 2
-
-### Heading 3
-
-#### Heading 4
-
-Vivamus sagittis lacus vel augue rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-## Code
-
-Cum sociis natoque penatibus et magnis dis `code element` montes, nascetur ridiculus mus.
-
-```js
-// Example can be run directly in your JavaScript console
-
-// Create a function that takes two arguments and returns the sum of those arguments
-var adder = new Function("a", "b", "return a + b");
-
-// Call the function
-adder(2, 6);
-// > 8
+(1, 28): Type 'void' doesn't exist.
+    function hi(name: string): void
+                               ^^^^
 ```
 
-Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.
+### Forward declarations
 
-## Lists
+Inside of function bodies code is logically executing from top to bottom, or
+more precisely from higher nodes in the tree to lower nodes in the tree. In that
+context, symbols must appear before use because code is depending on side
+effects.
 
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+However, outside of functions there isn't necessarily a well-defined order. Some
+languages, such as C or C++, are designed to compile top to bottom in a [single
+pass][single-pass], which means developers cannot call functions or refer to
+global variables unless they already appeared in the file. In order to solve
+problems where two functions need to [refer to each other][mutual recursion],
+they allow [forward declarations], where you basically only write the signature
+and omit the body, which is basically promising that you'll provide the
+definition later.
 
-* Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-* Donec id elit non mi porta gravida at eget metus.
-* Nulla vitae elit libero, a pharetra augue.
+Other languages, such as C#, don't do that. Instead, the compiler is using
+[multiple phases][multi-pass]. For example, first everything is parsed, then all
+types are being declared, then all members are being declared, and then all
+method bodies are bound. This can be implemented relatively efficiently and
+frees the developer from having to write any forward declarations or header
+files.
 
-Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.
+In Minsk, we're using multiple passes so that global variables and functions can
+appear in any order. We're doing this by first [declaring all functions] before
+[binding function bodies].
 
-1. Vestibulum id ligula porta felis euismod semper.
-2. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-3. Maecenas sed diam eget risus varius blandit sit amet non magna.
+[single-pass]: https://en.wikipedia.org/wiki/One-pass_compiler
+[forward declarations]: https://en.wikipedia.org/wiki/Forward_declaration
+[multi-pass]: https://en.wikipedia.org/wiki/Multi-pass_compiler
+[mutual recursion]: https://en.wikipedia.org/wiki/Mutual_recursion
+[declaring all functions]:  https://github.com/terrajobst/minsk/blob/c4ad1b199a8e858a9e01535aead020471fbd86f2/src/Minsk/CodeAnalysis/Binding/Binder.cs#L36-L37
+[binding function bodies]: https://github.com/terrajobst/minsk/blob/c4ad1b199a8e858a9e01535aead020471fbd86f2/src/Minsk/CodeAnalysis/Binding/Binder.cs#L39-L45
 
-Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.
+### Stack frames
 
-Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo.
+The evaluator currently only evaluates a single block. All variables are global
+so there is only a single instance of them in the entire program, so having a
+single dictionary that holds their value works.
 
-## Images
+In order to call functions, we need to have a way to let each function have
+their own instance of their local variables, per invocation. Keep in mind that
+in the symbol table there is only a single symbol for a local variable in any
+given function, but each time you call that function, you need to create a new
+storage location. Otherwise code will break in funny ways if you can end up
+calling a function you're currently int the middle of executing already, for
+example by recursion.
 
-Quisque consequat sapien eget quam rhoncus, sit amet laoreet diam tempus. Aliquam aliquam metus erat, a pulvinar turpis suscipit at.
+In virtually all systems this is achieved by using a stack. Each time you call a
+function, a new entry is pushed on the stack that represents the local state of
+the function, usually covering both the arguments as well as the local
+variables. This is usually called a *stack frame*. Each time you return from a
+function, the top most stack frame is popped off of that stack.
 
-![placeholder](https://placehold.it/800x400 "Large example image")
-![placeholder](https://placehold.it/400x200 "Medium example image")
-![placeholder](https://placehold.it/200x200 "Small example image")
+In Minsk, we're doing the same thing:
 
-## Tables
+1. When calling a function, a new set of locals is initialized. All [parameters
+   are added][params] to that new frame and that [frame is pushed][push].
+2. The function's body is identified and the [statement is executed][call].
+3. When the function is done, the frame is [popped off][pop].
 
-Aenean lacinia bibendum nulla sed consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+This also required us to change how we assign & lookup values for variables: by
+looking at the symbol kind we [identify] whether it's a global, a local variable
+or parameter. Global variables use the global dictionary while local variables
+and parameter use the current stack frame.
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upvotes</th>
-      <th>Downvotes</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <td>Totals</td>
-      <td>21</td>
-      <td>23</td>
-    </tr>
-  </tfoot>
-  <tbody>
-    <tr>
-      <td>Alice</td>
-      <td>10</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <td>Bob</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>Charlie</td>
-      <td>7</td>
-      <td>9</td>
-    </tr>
-  </tbody>
-</table>
+It might be tempting to check the contents of the global dictionary to see
+whether a given variable is global, but this dictionary is currently populated
+lazily, so the initial state is empty. We could change that but it's easier to
+change the binder to [create different kind of symbols][symbol creation] for
+global variables, local variables, and parameters. This also enables
+higher-level components (such as an IDE) to treat them differently, for example,
+by colorizing them differently, without having to walk the symbol table.
 
-Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo.
-
------
-
-Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
-
-
-
-
-
-
-
-
-
-
+[params]: https://github.com/terrajobst/minsk/blob/c4ad1b199a8e858a9e01535aead020471fbd86f2/src/Minsk/CodeAnalysis/Evaluator.cs#L235-L241
+[push]: https://github.com/terrajobst/minsk/blob/c4ad1b199a8e858a9e01535aead020471fbd86f2/src/Minsk/CodeAnalysis/Evaluator.cs#L243
+[call]: https://github.com/terrajobst/minsk/blob/c4ad1b199a8e858a9e01535aead020471fbd86f2/src/Minsk/CodeAnalysis/Evaluator.cs#L245-L246
+[pop]: https://github.com/terrajobst/minsk/blob/c4ad1b199a8e858a9e01535aead020471fbd86f2/src/Minsk/CodeAnalysis/Evaluator.cs#L248
+[identify]: https://github.com/terrajobst/minsk/blob/c4ad1b199a8e858a9e01535aead020471fbd86f2/src/Minsk/CodeAnalysis/Evaluator.cs#L269-L277
+[symbol creation]: https://github.com/terrajobst/minsk/blob/c4ad1b199a8e858a9e01535aead020471fbd86f2/src/Minsk/CodeAnalysis/Binding/Binder.cs#L462-L464

@@ -12,128 +12,50 @@ twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
 
-Cas sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. *Aenean eu leo quam.* Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.
+## Completed items
 
-> Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
+We added pretty printing for bound nodes as well as `break` and `continue`
+statements.
 
-Etiam porta **sem malesuada magna** mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
+## Interesting aspects
 
-## Inline HTML elements
+### Break and continue
 
-HTML defines a long list of available inline tags, a complete list of which can be found on the [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+Logically, all `if` statements and loops are basically just `goto`-statements.
+In order to support `break` and `continue`, we only have to make sure that all
+[loops have predefined labels][bound-loop] for `break` and `continue`. That
+means that we can just bind them to a `BoundGotoStatement`.
 
-- **To bold text**, use `<strong>`.
-- *To italicize text*, use `<em>`.
-- Abbreviations, like <abbr title="HyperText Markup Langage">HTML</abbr> should use `<abbr>`, with an optional `title` attribute for the full phrase.
-- Citations, like <cite>&mdash; Thiago Rossener</cite>, should use `<cite>`.
-- <del>Deleted</del> text should use `<del>` and <ins>inserted</ins> text should use `<ins>`.
-- Superscript <sup>text</sup> uses `<sup>` and subscript <sub>text</sub> uses `<sub>`.
+During binding, we only have to track the current loop by using a
+[stack][loop-stack] that has a tuple of `break` and `continue` labels. When
+binding a loop body, we [generate][bind-loop-body] labels for `break` and
+`continue` and push them onto that stack. And for [binding `break` and
+`continue`][bind-break-continue], we only have to use the corresponding label
+from the stack.
 
-Most of these elements are styled by browsers with few modifications on our part.
+[bound-loop]: https://github.com/terrajobst/minsk/blob/3982452187b615acd60db8ec2d26a3b0cf924c44/src/Minsk/CodeAnalysis/Binding/BoundLoopStatement.cs#L11-L12
+[loop-stack]: https://github.com/terrajobst/minsk/blob/3982452187b615acd60db8ec2d26a3b0cf924c44/src/Minsk/CodeAnalysis/Binding/Binder.cs#L17
+[bind-loop-body]: https://github.com/terrajobst/minsk/blob/3982452187b615acd60db8ec2d26a3b0cf924c44/src/Minsk/CodeAnalysis/Binding/Binder.cs#L268-L279
+[bind-break-continue]: https://github.com/terrajobst/minsk/blob/3982452187b615acd60db8ec2d26a3b0cf924c44/src/Minsk/CodeAnalysis/Binding/Binder.cs#L281-L303
 
-# Heading 1
+### Binder state
 
-## Heading 2
+The current design of the binder has mutable state. The assumption is that the
+binder is only used in one of two cases:
 
-### Heading 3
+1. [Binding global scope][bind-global-scope]. Since we want to allow developers
+   to declare functions in any order, we first need to bind the global scope,
+   that is declare all global variables and functions. Modulo diagnostics, this
+   requires no state.
 
-#### Heading 4
+2. [Binding function bodies][bind-function-body]. Given the bound global scope,
+   we then create a binder per function body for binding. This means the state
+   on the binder can assume that all its state is for the current function. In
+   other words, we don't have to worry that our loop stack would allow one
+   function to accidentally transfer control to a statement in another function.
 
-Vivamus sagittis lacus vel augue rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+This separation also makes it easy to parallelize the compiler. For example, we
+could bind all function bodies in parallel.
 
-## Code
-
-Cum sociis natoque penatibus et magnis dis `code element` montes, nascetur ridiculus mus.
-
-```js
-// Example can be run directly in your JavaScript console
-
-// Create a function that takes two arguments and returns the sum of those arguments
-var adder = new Function("a", "b", "return a + b");
-
-// Call the function
-adder(2, 6);
-// > 8
-```
-
-Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.
-
-## Lists
-
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-
-* Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-* Donec id elit non mi porta gravida at eget metus.
-* Nulla vitae elit libero, a pharetra augue.
-
-Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.
-
-1. Vestibulum id ligula porta felis euismod semper.
-2. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-3. Maecenas sed diam eget risus varius blandit sit amet non magna.
-
-Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.
-
-Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo.
-
-## Images
-
-Quisque consequat sapien eget quam rhoncus, sit amet laoreet diam tempus. Aliquam aliquam metus erat, a pulvinar turpis suscipit at.
-
-![placeholder](https://placehold.it/800x400 "Large example image")
-![placeholder](https://placehold.it/400x200 "Medium example image")
-![placeholder](https://placehold.it/200x200 "Small example image")
-
-## Tables
-
-Aenean lacinia bibendum nulla sed consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upvotes</th>
-      <th>Downvotes</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <td>Totals</td>
-      <td>21</td>
-      <td>23</td>
-    </tr>
-  </tfoot>
-  <tbody>
-    <tr>
-      <td>Alice</td>
-      <td>10</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <td>Bob</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>Charlie</td>
-      <td>7</td>
-      <td>9</td>
-    </tr>
-  </tbody>
-</table>
-
-Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo.
-
------
-
-Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
-
-
-
-
-
-
-
-
-
-
+[bind-global-scope]: https://github.com/terrajobst/minsk/blob/3982452187b615acd60db8ec2d26a3b0cf924c44/src/Minsk/CodeAnalysis/Binding/Binder.cs#L33-L57
+[bind-function-body]: https://github.com/terrajobst/minsk/blob/3982452187b615acd60db8ec2d26a3b0cf924c44/src/Minsk/CodeAnalysis/Binding/Binder.cs#L72-L73
