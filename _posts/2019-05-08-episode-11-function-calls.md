@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "Episode 11 - Function calls"
-date: 2017-09-10 12:26:40
-image: 'https://i9.ytimg.com/vi/98AI4XJA7Xk/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLDNONaXLMqBx3jsgMCofzDdFcZo4w'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 11.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'life'
 tags:

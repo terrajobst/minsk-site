@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "Episode 12 - Function declarations"
-date: 2018-03-12 12:26:40
-image: 'https://i9.ytimg.com/vi/psTZi6xpTlM/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLDRkM4LMCVJNJM9BFE5yBwwSM_xrQ'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 12.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'tips'
 tags:

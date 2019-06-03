@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "Episode 14: Return statements and control flow analysis"
-date: 2018-04-21 12:26:40
-image: 'https://i9.ytimg.com/vi/5813y1T8lhc/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLC3JiImjsdM1I_3AQ2vQLiFshdC-A'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 14.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'framework'
 tags:

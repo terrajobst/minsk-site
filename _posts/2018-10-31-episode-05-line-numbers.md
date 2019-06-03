@@ -2,7 +2,7 @@
 layout: post
 title: "Episode 5: Line numbers"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-image: 'https://i9.ytimg.com/vi/EEzuO9XWmUY/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLAn2GkqTwLGsx7Y3c25310bATIw1g'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 05.png'
 category: 'tutorial'
 tags:
 - vuejs

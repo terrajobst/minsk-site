@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "Episode 9 - A better REPL"
-date: 2017-08-07 23:04:08
-image: 'https://i9.ytimg.com/vi/QwZuY1dExAc/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLA6I7Q7V_7HodhXXJHK-W_6Pt-n9Q'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 09.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'tutorial'
 tags:

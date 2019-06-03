@@ -2,7 +2,7 @@
 layout: post
 title: "Episode 1: A basic expression evaluator"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-image: 'https://i9.ytimg.com/vi/wgHIkdUQbp0/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLB2BHkIVdwGehUiM_R0lvXc6wkQbA'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 01.png'
 category: 'blog'
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

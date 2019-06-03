@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "Episode 13: Break and continue"
-date: 2018-03-12 12:26:40
-image: 'https://i9.ytimg.com/vi/NvVc8erZpeI/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLDvQMBK6CNUQ8mTtaSRsCG7LPMgtA'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 13.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'tips'
 tags:

@@ -6,7 +6,7 @@ category: 'webdev'
 tags:
 - design
 - sketch
-image: 'https://i9.ytimg.com/vi/M0mEvzfObN0/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLBiXkO6CxiQlIsniKSGpudxPpwt9A'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 06.png'
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---

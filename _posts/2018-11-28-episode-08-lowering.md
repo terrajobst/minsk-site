@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "Episode 8: Lowering"
-date: 2017-07-29 13:24:49
-image: 'https://i9.ytimg.com/vi/PfpayNvfu20/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLAzE9rLpvuZaEIrzplGs3vgZxMYyw'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 08.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'blog'
 tags:

@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "Episode 10 - Strings and Types"
-date: 2017-08-14 22:55:45
-image: 'https://i9.ytimg.com/vi/VkFNanrdvLc/maxresdefault.jpg?sqp=CKyGzucF&rs=AOn4CLBnBP4RKhdH9G7ZOAbF1M3-aGLsLw'
+image: '{{ site.baseurl }}/assets/img/episodes/Episode 10.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'css'
 tags:
