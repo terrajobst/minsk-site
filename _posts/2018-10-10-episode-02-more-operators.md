@@ -2,7 +2,7 @@
 layout: post
 title: "Episode 2: More operators"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-image: '{{ site.baseurl }}/assets/img/episodes/Episode 02.png'
+image: '/assets/img/episodes/Episode 02.png'
 category: 'mobile'
 tags:
 - component

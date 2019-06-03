@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Episode 10 - Strings and Types"
-image: '{{ site.baseurl }}/assets/img/episodes/Episode 10.png'
+image: '/assets/img/episodes/Episode 10.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'css'
 tags:

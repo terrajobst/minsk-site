@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Episode 14: Return statements and control flow analysis"
-image: '{{ site.baseurl }}/assets/img/episodes/Episode 14.png'
+image: '/assets/img/episodes/Episode 14.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'framework'
 tags:

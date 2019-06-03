@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Episode 12 - Function declarations"
-image: '{{ site.baseurl }}/assets/img/episodes/Episode 12.png'
+image: '/assets/img/episodes/Episode 12.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'tips'
 tags:

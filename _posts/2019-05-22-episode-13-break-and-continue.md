@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Episode 13: Break and continue"
-image: '{{ site.baseurl }}/assets/img/episodes/Episode 13.png'
+image: '/assets/img/episodes/Episode 13.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'tips'
 tags:

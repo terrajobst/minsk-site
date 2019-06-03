@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Episode 9 - A better REPL"
-image: '{{ site.baseurl }}/assets/img/episodes/Episode 09.png'
+image: '/assets/img/episodes/Episode 09.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'tutorial'
 tags:

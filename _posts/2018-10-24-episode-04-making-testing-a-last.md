@@ -2,7 +2,7 @@
 layout: post
 title: "Episode 4: Making testing a blast"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-image: '{{ site.baseurl }}/assets/img/episodes/Episode 04.png'
+image: '/assets/img/episodes/Episode 04.png'
 category: 'django'
 tags:
 - django

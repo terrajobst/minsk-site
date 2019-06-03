@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Episode 8: Lowering"
-image: '{{ site.baseurl }}/assets/img/episodes/Episode 08.png'
+image: '/assets/img/episodes/Episode 08.png'
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'blog'
 tags:
