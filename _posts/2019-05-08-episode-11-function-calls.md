@@ -2,6 +2,7 @@
 layout: post
 title: "Episode 11 - Function calls"
 image: '/assets/img/episodes/Episode 11.png'
+ytvideo: 98AI4XJA7Xk
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'life'
 tags:

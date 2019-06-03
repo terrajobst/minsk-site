@@ -2,6 +2,7 @@
 layout: post
 title: "Episode 13: Break and continue"
 image: '/assets/img/episodes/Episode 13.png'
+ytvideo: NvVc8erZpeI
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'tips'
 tags:

@@ -2,6 +2,7 @@
 layout: post
 title: "Episode 9 - A better REPL"
 image: '/assets/img/episodes/Episode 09.png'
+ytvideo: QwZuY1dExAc
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'tutorial'
 tags:

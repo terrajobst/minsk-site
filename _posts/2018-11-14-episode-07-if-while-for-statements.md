@@ -7,6 +7,7 @@ tags:
 - design
 - sketch
 image: '/assets/img/episodes/Episode 07.png'
+ytvideo: SJE_gUnJl2Y
 twitter_text: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 introduction: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---

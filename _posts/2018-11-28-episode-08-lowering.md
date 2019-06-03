@@ -2,6 +2,7 @@
 layout: post
 title: "Episode 8: Lowering"
 image: '/assets/img/episodes/Episode 08.png'
+ytvideo: PfpayNvfu20
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'blog'
 tags:

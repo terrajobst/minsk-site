@@ -3,6 +3,7 @@ layout: post
 title: "Episode 2: More operators"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 image: '/assets/img/episodes/Episode 02.png'
+ytvideo: 3XM9vUGduhk
 category: 'mobile'
 tags:
 - component

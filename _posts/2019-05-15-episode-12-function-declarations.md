@@ -2,6 +2,7 @@
 layout: post
 title: "Episode 12 - Function declarations"
 image: '/assets/img/episodes/Episode 12.png'
+ytvideo: psTZi6xpTlM
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'tips'
 tags:

@@ -2,6 +2,7 @@
 layout: post
 title: "Episode 10 - Strings and Types"
 image: '/assets/img/episodes/Episode 10.png'
+ytvideo: VkFNanrdvLc
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 category: 'css'
 tags:

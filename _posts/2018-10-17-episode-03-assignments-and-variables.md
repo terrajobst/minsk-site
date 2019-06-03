@@ -3,6 +3,7 @@ layout: post
 title: "Episode 3: Assignments and variables"
 description: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 image: '/assets/img/episodes/Episode 03.png'
+ytvideo: 61dLQNgd9o8
 category: 'mobile'
 tags:
 - app
